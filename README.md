@@ -26,10 +26,14 @@ Este projeto foi desenvolvido para estudar e aplicar os algoritmos de Kruskal e 
 
 ### Guia Passo a Passo
 
-1. **Criar o Grafo:**
-   - Inicialize um grafo com o número de vértices desejado.
-   - Adicione arestas ao grafo especificando a origem, destino e peso.
+1. **Criar o Grafo Usando Argumentos de Linha de Comando:**
 
+Para inicializar um grafo com um número específico de vértices e adicionar arestas, execute o seguinte comando:
+
+```sh
+java -jar grafos-mst.jar <vertices> <arestas> <origem1> <destino1> <peso1> <origem2> <destino2> <peso2> ...
+```
+Por exemplo, para criar um grafo com 5 vértices e adicionar as seguintes arestas:
 ```java
 Grafo grafo = new Grafo(5);
 grafo.adicionarAresta(0, 1, 10);
@@ -38,8 +42,13 @@ grafo.adicionarAresta(0, 3, 5);
 grafo.adicionarAresta(1, 3, 15);
 grafo.adicionarAresta(2, 3, 4);
 ```
-
+O comando correspondente seria:
+```sh
+java -jar grafos-mst.jar 5 5 0 1 10 0 2 6 0 3 5 1 3 15 2 3 4
+```
 2. **Executar o Algoritmo de Kruskal:**
+
+Para executar o algoritmo de Kruskal e encontrar a Árvore Geradora Mínima (MST), utilize o seguinte trecho de código:
 
 ```java
 Kruskal kruskal = new Kruskal();
@@ -47,6 +56,8 @@ List<Aresta> mstKruskal = kruskal.executarKruskal(grafo);
 ```
 
 3. **Executar o Algoritmo de Prim:**
+
+Para executar o algoritmo de Prim e encontrar a Árvore Geradora Mínima (MST), utilize o seguinte trecho de código:
 
 ```java
 Prim prim = new Prim();

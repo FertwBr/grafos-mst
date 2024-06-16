@@ -11,6 +11,18 @@ public class Aresta implements Comparable<Aresta> {
         this.peso = peso;
     }
 
+    public int getOrigem() {
+        return origem;
+    }
+
+    public int getDestino() {
+        return destino;
+    }
+
+    public int getPeso() {
+        return peso;
+    }
+
     @Override
     public int compareTo(Aresta outraAresta) {
         return this.peso - outraAresta.peso;

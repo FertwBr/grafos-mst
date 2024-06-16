@@ -15,4 +15,12 @@ public class Vertice {
     public void adicionarAresta(Aresta aresta) {
         arestas.add(aresta);
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public List<Aresta> getArestas() {
+        return arestas;
+    }
 }

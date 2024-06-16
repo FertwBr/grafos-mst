@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="grafos-mst:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/grafos_mst_jar</output-path>
+    <root id="archive" name="grafos-mst.jar">
+      <element id="module-output" name="grafos-mst" />
+    </root>
+  </artifact>
+</component>

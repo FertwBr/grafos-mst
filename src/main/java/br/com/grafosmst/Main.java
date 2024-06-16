@@ -4,24 +4,27 @@ import br.com.grafosmst.algorithm.Kruskal;
 import br.com.grafosmst.algorithm.Prim;
 import br.com.grafosmst.model.Aresta;
 import br.com.grafosmst.model.Grafo;
-import java.util.*;
+
+import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Número de vértices: ");
-        int vertices = scanner.nextInt();
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            System.out.println("Usage: java -jar grafos-mst.jar <vertices> <arestas>");
+            return;
+        }
+
+        int vertices = Integer.parseInt(args[0]);
         Grafo grafo = new Grafo(vertices);
 
-        System.out.print("Número de arestas: ");
-        int arestas = scanner.nextInt();
-
+        int arestas = Integer.parseInt(args[1]);
         System.out.println("Digite as arestas (origem destino peso):");
+
         for (int i = 0; i < arestas; i++) {
-            int origem = scanner.nextInt();
-            int destino = scanner.nextInt();
-            int peso = scanner.nextInt();
+            int origem = Integer.parseInt(args[2 + i * 3]);
+            int destino = Integer.parseInt(args[2 + i * 3 + 1]);
+            int peso = Integer.parseInt(args[2 + i * 3 + 2]);
             grafo.adicionarAresta(origem, destino, peso);
         }
 

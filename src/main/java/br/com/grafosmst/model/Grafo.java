@@ -35,4 +35,12 @@ public class Grafo {
     public List<Aresta> getArestas() {
         return arestas;
     }
+
+    public List<List<Aresta>> getAdjacencias() {
+        List<List<Aresta>> adjacencias = new ArrayList<>();
+        for (int i = 0; i < vertices; i++) {
+            adjacencias.add(new ArrayList<>(verticesList.get(i).getArestas()));
+        }
+        return adjacencias;
+    }
 }

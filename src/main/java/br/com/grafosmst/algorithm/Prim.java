@@ -7,9 +7,7 @@ import java.util.*;
 
 public class Prim {
 
-    public static final int verticeInicial = 0;
-
-    public List<Aresta> executarPrim(Grafo grafo) {
+    public List<Aresta> executarPrim(Grafo grafo, int verticeInicial) {
         List<Aresta> mst = new ArrayList<>();
         boolean[] incluido = new boolean[grafo.getVertices()];
         PriorityQueue<Aresta> pq = new PriorityQueue<>(Comparator.comparingInt(Aresta::getPeso));

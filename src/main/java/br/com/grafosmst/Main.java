@@ -19,23 +19,27 @@ public class Main {
         Grafo grafo = new Grafo(vertices);
 
         int arestas = Integer.parseInt(args[1]);
-        System.out.println("Digite as arestas (origem destino peso):");
 
         for (int i = 0; i < arestas; i++) {
+            if (args.length < 3 + i * 3) {
+                System.err.println("Insufficient arguments for edge " + i);
+                return;
+            }
+
             int origem = Integer.parseInt(args[2 + i * 3]);
-            int destino = Integer.parseInt(args[2 + i * 3 + 1]);
-            int peso = Integer.parseInt(args[2 + i * 3 + 2]);
+            int destino = Integer.parseInt(args[3 + i * 3]);
+            int peso = Integer.parseInt(args[4 + i * 3]);
             grafo.adicionarAresta(origem, destino, peso);
         }
 
         Prim prim = new Prim();
         List<Aresta> mstPrim = prim.executarPrim(grafo);
-        System.out.println("\nÁrvore Geradora Mínima (Prim):");
+        System.out.println("\nArvore Geradora Minima (Prim):");
         imprimirMST(mstPrim);
 
         Kruskal kruskal = new Kruskal();
         List<Aresta> mstKruskal = kruskal.executarKruskal(grafo);
-        System.out.println("\nÁrvore Geradora Mínima (Kruskal):");
+        System.out.println("\nArvore Geradora Minima (Kruskal):");
         imprimirMST(mstKruskal);
     }
 

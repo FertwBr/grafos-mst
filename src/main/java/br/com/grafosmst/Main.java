@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usage: java -jar grafos-mst.jar <vertices> <arestas>");
+            System.out.println("Usage: java -jar grafos-mst.jar <vertices> <arestas> [<verticeInicial>]");
             return;
         }
 
@@ -19,21 +19,27 @@ public class Main {
         Grafo grafo = new Grafo(vertices);
 
         int arestas = Integer.parseInt(args[1]);
+        Integer verticeInicial = null; // valor padrão como null
+
+        int offset = 2; // índice de início das arestas nos argumentos
+        if (args.length > 2 + arestas * 3) {
+            verticeInicial = Integer.parseInt(args[2]);
+            offset = 3; // ajuste do índice de início das arestas
+        }
 
         for (int i = 0; i < arestas; i++) {
-            if (args.length < 3 + i * 3) {
-                System.err.println("Insufficient arguments for edge " + i);
-                return;
-            }
-
-            int origem = Integer.parseInt(args[2 + i * 3]);
-            int destino = Integer.parseInt(args[3 + i * 3]);
-            int peso = Integer.parseInt(args[4 + i * 3]);
+            int origem = Integer.parseInt(args[offset + i * 3]);
+            int destino = Integer.parseInt(args[offset + i * 3 + 1]);
+            int peso = Integer.parseInt(args[offset + i * 3 + 2]);
             grafo.adicionarAresta(origem, destino, peso);
         }
 
+        if (verticeInicial == null) {
+            verticeInicial = encontrarMelhorVerticeInicial(grafo);
+        }
+
         Prim prim = new Prim();
-        List<Aresta> mstPrim = prim.executarPrim(grafo);
+        List<Aresta> mstPrim = prim.executarPrim(grafo, verticeInicial);
         System.out.println("\nArvore Geradora Minima (Prim):");
         imprimirMST(mstPrim);
 
@@ -43,6 +49,7 @@ public class Main {
         imprimirMST(mstKruskal);
     }
 
+
     private static void imprimirMST(List<Aresta> mst) {
         int pesoTotal = 0;
         for (Aresta aresta : mst) {
@@ -51,4 +58,21 @@ public class Main {
         }
         System.out.println("Peso total da MST: " + pesoTotal);
     }
+
+    private static int encontrarMelhorVerticeInicial(Grafo grafo) {
+        int melhorVertice = 0;
+        int menorPeso = Integer.MAX_VALUE;
+
+        for (int i = 0; i < grafo.getVertices(); i++) {
+            for (Aresta aresta : grafo.getAdjacencias().get(i)) {
+                if (aresta.getPeso() < menorPeso) {
+                    menorPeso = aresta.getPeso();
+                    melhorVertice = i;
+                }
+            }
+        }
+
+        return melhorVertice;
+    }
+
 }

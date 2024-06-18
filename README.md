@@ -1,3 +1,7 @@
+Aqui está o README atualizado com as alterações necessárias para refletir o código atualizado, incluindo a flexibilidade na escolha do vértice inicial:
+
+---
+
 # Grafos-mst: Algoritmos de Grafos MST (Árvore Geradora Mínima)
 
 Este projeto implementa os algoritmos de Prim e Kruskal para encontrar a Árvore Geradora Mínima (MST) em um grafo ponderado e conectado.
@@ -7,7 +11,7 @@ Este projeto implementa os algoritmos de Prim e Kruskal para encontrar a Árvore
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Dependências](#dependências)
 - [Como Usar](#como-usar)
-  - [Guia Passo a Passo](#guia-passo-a-passo)
+  - [Execução a partir da Linha de Comando](#execução-a-partir-da-linha-de-comando)
   - [Trechos de Código Relevantes](#trechos-de-código-relevantes)
 - [Instruções de Instalação](#instruções-de-instalação)
 - [Contribuição](#contribuição)
@@ -24,196 +28,187 @@ Este projeto foi desenvolvido para estudar e aplicar os algoritmos de Kruskal e 
 
 ## Como Usar
 
-### Guia Passo a Passo
+### Execução a partir da Linha de Comando
 
-1. **Criar o Grafo Usando Argumentos de Linha de Comando:**
+Para executar o projeto a partir da linha de comando, siga os passos abaixo:
 
-Para inicializar um grafo com um número específico de vértices e adicionar arestas, execute o seguinte comando:
+1. **Compilar o Código:**
+
+Se estiver usando Maven, navegue até o diretório do projeto e execute:
 
 ```sh
-java -jar grafos-mst.jar <vertices> <arestas> <origem1> <destino1> <peso1> <origem2> <destino2> <peso2> ...
+mvn clean install
 ```
-Por exemplo, para criar um grafo com 5 vértices e adicionar as seguintes arestas:
-```java
-Grafo grafo = new Grafo(5);
-grafo.adicionarAresta(0, 1, 10);
-grafo.adicionarAresta(0, 2, 6);
-grafo.adicionarAresta(0, 3, 5);
-grafo.adicionarAresta(1, 3, 15);
-grafo.adicionarAresta(2, 3, 4);
+
+Se não estiver usando Maven, compile os arquivos `.java` manualmente:
+
+```sh
+javac -d bin src/main/java/br/com/grafosmst/model/*.java src/main/java/br/com/grafosmst/algorithm/*.java
 ```
-O comando correspondente seria:
+
+2. **Executar o JAR com Argumentos:**
+
+Para executar o programa, utilize o seguinte comando:
+
+```sh
+java -jar grafos-mst.jar <vertices> <arestas> [<verticeInicial>]
+```
+
+- `<vertices>`: Número de vértices no grafo.
+- `<arestas>`: Número de arestas no grafo.
+- `[<verticeInicial>]` (opcional): Vértice inicial para o algoritmo de Prim. Se não especificado, será escolhido automaticamente.
+
+Exemplo de uso:
+
 ```sh
 java -jar grafos-mst.jar 5 5 0 1 10 0 2 6 0 3 5 1 3 15 2 3 4
-```
-2. **Executar o Algoritmo de Kruskal:**
-
-Para executar o algoritmo de Kruskal e encontrar a Árvore Geradora Mínima (MST), utilize o seguinte trecho de código:
-
-```java
-Kruskal kruskal = new Kruskal();
-List<Aresta> mstKruskal = kruskal.executarKruskal(grafo);
-```
-
-3. **Executar o Algoritmo de Prim:**
-
-Para executar o algoritmo de Prim e encontrar a Árvore Geradora Mínima (MST), utilize o seguinte trecho de código:
-
-```java
-Prim prim = new Prim();
-List<Aresta> mstPrim = prim.executarPrim(grafo);
 ```
 
 ### Trechos de Código Relevantes
 
 #### Classe `Grafo`
-A classe Grafo representa uma estrutura de dados que armazena um grafo não direcionado. Aqui estão suas principais funcionalidades:
+
+A classe `Grafo` representa uma estrutura de dados que armazena um grafo não direcionado:
+
 ```java
+package br.com.grafosmst.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Grafo {
-   // Número de vértices no grafo
-   int vertices;
+    int vertices; // Número de vértices no grafo
+    List<Vertice> verticesList; // Lista de vértices
+    List<Aresta> arestas; // Lista de arestas
 
-   // Lista de vértices do grafo
-   List<Vertice> verticesList;
+    // Construtor da classe Grafo
+    public Grafo(int vertices) {
+        this.vertices = vertices;
+        this.verticesList = new ArrayList<>();
+        this.arestas = new ArrayList<>();
+        for (int i = 0; i < vertices; i++) {
+            verticesList.add(new Vertice(i)); // Adiciona um novo vértice à lista de vértices
+        }
+    }
 
-   // Lista de arestas do grafo
-   List<Aresta> arestas;
+    // Método para adicionar uma aresta ao grafo
+    public void adicionarAresta(int origem, int destino, int peso) {
+        Aresta aresta = new Aresta(origem, destino, peso); // Cria uma nova aresta
+        verticesList.get(origem).adicionarAresta(aresta); // Adiciona a aresta ao vértice de origem
+        verticesList.get(destino).adicionarAresta(aresta); // Adiciona a aresta ao vértice de destino
+        arestas.add(aresta); // Adiciona a aresta à lista de arestas
+    }
 
-   // Construtor que inicializa o grafo com o número especificado de vértices
-   public Grafo(int vertices) {
-      this.vertices = vertices;
-      this.verticesList = new ArrayList<>();
-      this.arestas = new ArrayList<>();
+    // Método para obter o número de vértices no grafo
+    public int getVertices() {
+        return vertices;
+    }
 
-      // Adiciona cada vértice à lista de vértices
-      for (int i = 0; i < vertices; i++) {
-         verticesList.add(new Vertice(i));
-      }
-   }
+    // Método para obter a lista de vértices
+    public List<Vertice> getVerticesList() {
+        return verticesList;
+    }
 
-   // Método para adicionar uma aresta ao grafo
-   public void adicionarAresta(int origem, int destino, int peso) {
-      Aresta aresta = new Aresta(origem, destino, peso);
+    // Método para obter a lista de arestas
+    public List<Aresta> getArestas() {
+        return arestas;
+    }
 
-      // Adiciona a aresta ao vértice de origem
-      verticesList.get(origem).adicionarAresta(aresta);
-
-      // Adiciona a mesma aresta ao vértice de destino (considerando grafo não direcionado)
-      verticesList.get(destino).adicionarAresta(aresta);
-
-      // Adiciona a aresta à lista de arestas do grafo
-      arestas.add(aresta);
-   }
-
-   // Retorna o número de vértices no grafo
-   public int getVertices() {
-      return vertices;
-   }
-
-   // Retorna a lista de vértices do grafo
-   public List<Vertice> getVerticesList() {
-      return verticesList;
-   }
-
-   // Retorna a lista de arestas do grafo
-   public List<Aresta> getArestas() {
-      return arestas;
-   }
+    // Método para obter a lista de adjacências
+    public List<List<Aresta>> getAdjacencias() {
+        List<List<Aresta>> adjacencias = new ArrayList<>();
+        for (int i = 0; i < vertices; i++) {
+            adjacencias.add(new ArrayList<>(verticesList.get(i).getArestas())); // Adiciona a lista de arestas de cada vértice à lista de adjacências
+        }
+        return adjacencias;
+    }
 }
-
 ```
 
 #### Classe `Kruskal`
-A classe Kruskal implementa o algoritmo de Kruskal para encontrar a Árvore Geradora Mínima (MST) em um grafo ponderado não direcionado:
+
+A classe `Kruskal` implementa o algoritmo de Kruskal para encontrar a Árvore Geradora Mínima (MST) em um grafo ponderado não direcionado:
+
 ```java
 public class Kruskal {
-   // Método para executar o algoritmo de Kruskal e encontrar a MST
    public List<Aresta> executarKruskal(Grafo grafo) {
-      // Lista para armazenar as arestas da MST
       List<Aresta> mst = new ArrayList<>();
 
-      // Ordena as arestas do grafo por peso
-      Collections.sort(grafo.getArestas());
+      Collections.sort(grafo.getArestas()); // Ordenar as arestas por peso
 
-      // Estrutura Union-Find para detectar ciclos
       UnionFind uf = new UnionFind(grafo.getVertices());
 
-      // Itera sobre todas as arestas do grafo, em ordem crescente de peso
       for (Aresta aresta : grafo.getArestas()) {
          int origem = aresta.getOrigem();
          int destino = aresta.getDestino();
 
-         // Verifica se adicionar a aresta não forma um ciclo
          if (uf.find(origem) != uf.find(destino)) {
-            // Adiciona a aresta à MST
             mst.add(aresta);
-            // Une os conjuntos dos vértices origem e destino na estrutura Union-Find
             uf.union(origem, destino);
          }
       }
 
-      // Retorna a MST encontrada
       return mst;
    }
 }
 ```
 
 #### Classe `Prim`
-A classe Prim implementa o algoritmo de Prim para encontrar a Árvore Geradora Mínima (MST) em um grafo ponderado não direcionado:
+
+A classe `Prim` implementa o algoritmo de Prim para encontrar a Árvore Geradora Mínima (MST) em um grafo ponderado não direcionado:
+
 ```java
 public class Prim {
-   // Vértice inicial para iniciar o algoritmo de Prim
-   public static final int verticeInicial = 0;
+    // Método para executar o algoritmo de Prim
+    public List<Aresta> executarPrim(Grafo grafo, Integer verticeInicial) {
+        List<Aresta> mst = new ArrayList<>(); // Lista para armazenar a MST
+        boolean[] incluido = new boolean[grafo.getVertices()]; // Array para verificar se um vértice já foi incluído na MST
+        PriorityQueue<Aresta> pq = new PriorityQueue<>(Comparator.comparingInt(Aresta::getPeso)); // Fila de prioridade para armazenar as arestas pelo peso
 
-   // Método para executar o algoritmo de Prim e encontrar a MST
-   public List<Aresta> executarPrim(Grafo grafo) {
-      // Lista para armazenar as arestas da MST
-      List<Aresta> mst = new ArrayList<>();
+        // Se o vértice inicial não for especificado, encontre o melhor vértice inicial
+        if (verticeInicial == null) {
+            verticeInicial = encontrarMelhorVerticeInicial(grafo);
+        }
 
-      // Array para controlar quais vértices estão incluídos na MST
-      boolean[] incluido = new boolean[grafo.getVertices()];
+        incluido[verticeInicial] = true; // Marque o vértice inicial como incluído
 
-      // Fila de prioridade para armazenar e ordenar as arestas, ordenadas pelo peso
-      PriorityQueue<Aresta> pq = new PriorityQueue<>(Comparator.comparingInt(Aresta::getPeso));
-
-      // Inicia o algoritmo a partir do vértice inicial
-      incluido[verticeInicial] = true;
-
-      // Adiciona todas as arestas que saem do vértice inicial na fila de prioridade
-      for (Aresta aresta : grafo.getArestas()) {
-         if (aresta.getOrigem() == verticeInicial) {
-            pq.add(aresta);
-         }
-      }
-
-      // Enquanto houver arestas na fila de prioridade
-      while (!pq.isEmpty()) {
-         // Obtém a aresta de menor peso
-         Aresta arestaMenor = pq.poll();
-         int destino = arestaMenor.getDestino();
-
-         // Verifica se o vértice de destino já está incluído na MST
-         if (!incluido[destino]) {
-            // Adiciona a aresta à MST
-            mst.add(arestaMenor);
-            incluido[destino] = true;
-
-            // Adiciona todas as arestas que saem do vértice destino na fila de prioridade
-            for (Aresta aresta : grafo.getArestas()) {
-               if (aresta.getOrigem() == destino && !incluido[aresta.getDestino()]) {
-                  pq.add(aresta);
-               }
+        // Adicione todas as arestas do vértice inicial à fila de prioridade
+        for (Aresta aresta : grafo.getArestas()) {
+            if (aresta.getOrigem() == verticeInicial) {
+                pq.add(aresta);
             }
-         }
-      }
+        }
 
-      // Retorna a MST encontrada
-      return mst;
-   }
-}
+        // Enquanto a fila de prioridade não estiver vazia
+        while (!pq.isEmpty()) {
+            Aresta arestaMenor = pq.poll(); // Remova a aresta com o menor peso
+            int destino = arestaMenor.getDestino(); // Obtenha o vértice de destino da aresta
+
+            // Se o vértice de destino não estiver incluído na MST
+            if (!incluido[destino]) {
+                mst.add(arestaMenor); // Adicione a aresta à MST
+                incluido[destino] = true; // Marque o vértice de destino como incluído
+
+                // Adicione todas as arestas do vértice de destino à fila de prioridade
+                for (Aresta aresta : grafo.getArestas()) {
+                    if (aresta.getOrigem() == destino && !incluido[aresta.getDestino()]) {
+                        pq.add(aresta);
+                    }
+                }
+            }
+        }
+
+        return mst; // Retorne a MST
+    }
+
+    // Método para encontrar o melhor vértice inicial
+    private int encontrarMelhorVerticeInicial(Grafo grafo) {
+        int melhorVertice = 0; // Variável para armazenar o melhor vértice
+        int menorPeso = Integer.MAX_VALUE; // Variável para armazenar o menor peso
+
+        // Para cada vértice no grafo
+        for (int i = 0; i < grafo.getVertices(); i++) {
 ```
-
-
 
 ## Instruções de Instalação
 

@@ -1,5 +1,3 @@
-Aqui está o README atualizado com as alterações necessárias para refletir o código atualizado, incluindo a flexibilidade na escolha do vértice inicial:
-
 ---
 
 # Grafos-mst: Algoritmos de Grafos MST (Árvore Geradora Mínima)
